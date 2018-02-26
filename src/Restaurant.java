@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Restaurant extends Location {
 
     //popularity out of 5 stars
@@ -5,6 +7,7 @@ public class Restaurant extends Location {
     //affected by complexity - more time to cook food = higher rating
     private int popularityRating;
     private double wealth;
+    private List<Menu> menuInventory;
 
     public Food cookFood() {
         return null;
@@ -24,5 +27,13 @@ public class Restaurant extends Location {
 
     public void setWealth(double wealth) {
         this.wealth = wealth;
+    }
+
+    public List<Menu> getMenuInventory() {
+        return menuInventory;
+    }
+
+    public void setMenuInventory(List<Menu> menuInventory) {
+        this.menuInventory = menuInventory;
     }
 }

@@ -9,4 +9,5 @@ public abstract class Object {
     public void setName(String name) {
         this.name = name;
     }
+
 }

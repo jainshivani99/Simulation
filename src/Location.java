@@ -38,4 +38,7 @@ public abstract class Location {
     public void setRecipeInventory(List<Recipe> recipeInventory) {
         this.recipeInventory = recipeInventory;
     }
+
+
+
 }
