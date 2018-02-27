@@ -21,6 +21,7 @@ public class Simulation {
     private static int elapsedTime = 0;
     private static int remainingTime;
     private static final int END_MINUTES = 1440;
+    private static final int MARKET_TRAVEL_TIME = 60;
 
     private static boolean inMarket = false;
 
@@ -59,6 +60,7 @@ public class Simulation {
                         printTimeLeft();
                         break;
                     case "popularity rating":
+                        //TODO: Finish this implementation
                         myRestaurant.getPopularityRating();
                         break;
                     case "menu list":
@@ -123,7 +125,7 @@ public class Simulation {
                         }
                     }
                 } else if (userCommand.startsWith("cook ")) {
-                    //TODO: Finish this functionality
+                    //TODO: Finish this functionality with amount
                     //cook the specified food for the specified amount
                     String thisFoodNameAndAmount = userInput.substring(5);
                     String[] thisFoodNameAndAmountArray = thisFoodNameAndAmount.split(" ");
@@ -148,7 +150,7 @@ public class Simulation {
                 if (userCommand.equals("exit")) {
                     System.out.println("You are now exiting the market.");
                     //pass one hour
-                    currentTime += 60;
+                    currentTime += MARKET_TRAVEL_TIME;
                     inMarket = false;
                 } else if (userCommand.startsWith("list ")) {
                     //list all the items of the specified type for sale
@@ -175,24 +177,23 @@ public class Simulation {
                         }
                     }
                 } else if (userCommand.startsWith("buy ")) {
-                    //TODO: Finish this functionality
+                    //TODO: Finish this functionality with amount
                     //buy specified item for specified quantity
                     String thisObjectAndAmount = userInput.substring(4);
                     String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
                     String objectName = thisObjectNameAndAmountArray[0];
                     String objectAmount = thisObjectNameAndAmountArray[1];
                     int objectAmountInt = Integer.parseInt(objectAmount);
-                    myMarket.buyObject(objectName, objectAmountInt);
+                    myMarket.buyObject(objectName, objectAmountInt, myRestaurant);
                 } else if (userCommand.startsWith("sell ")) {
-                    //TODO: Finish this functionality
+                    //TODO: Finish this functionality with amount
                     //sell specified item for specified quantity
                     String thisObjectAndAmount = userInput.substring(5);
                     String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
                     String objectName = thisObjectNameAndAmountArray[0];
                     String objectAmount = thisObjectNameAndAmountArray[1];
                     int objectAmountInt = Integer.parseInt(objectAmount);
-                    myMarket.sellObject(objectName, objectAmountInt);
-
+                    myMarket.sellObject(objectName, objectAmountInt, myRestaurant);
                 }
             }
 
@@ -293,5 +294,13 @@ public class Simulation {
         } else {
             System.out.println(remainingTime);
         }
+    }
+
+    public static int getCurrentTime() {
+        return currentTime;
+    }
+
+    public static void setCurrentTime(int currentTime) {
+        Simulation.currentTime = currentTime;
     }
 }

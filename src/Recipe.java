@@ -4,7 +4,7 @@ import java.util.List;
 public class Recipe extends Object {
 
     private double baseValue;
-    private double sellValue;
+    private double sellValue = 0.5 * baseValue;
     private List<Food> ingredients;
     private Food outputFood;
     private List<Equipment> requiredEquipment;
