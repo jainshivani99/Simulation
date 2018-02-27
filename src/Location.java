@@ -39,6 +39,4 @@ public abstract class Location {
         this.recipeInventory = recipeInventory;
     }
 
-
-
 }

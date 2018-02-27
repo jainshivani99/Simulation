@@ -7,9 +7,27 @@ public class Restaurant extends Location {
     //affected by complexity - more time to cook food = higher rating
     private int popularityRating;
     private double wealth;
-    private List<Menu> menuInventory;
+    private Menu restaurantMenu;
 
-    public Food cookFood() {
+    public Food cookFood(String thisFoodName, int thisFoodAmountInt) {
+        for (Recipe recipeObj : getRecipeInventory()) {
+            Food outputFood = recipeObj.getOutputFood();
+            if (outputFood.getName().equals(thisFoodName)) {
+                //check the ingredients and equipment for this recipe object
+                for (Equipment myEquipment : getEquipmentInventory()) {
+                    for (Equipment myEquipmentObj : recipeObj.getRequiredEquipment()) {
+                        if (myEquipment.equals(myEquipmentObj)) {
+
+                        }
+                    }
+                }
+//                for (Food foodObj : myRestaurant.getFoodInventory()) {
+//                    for (Food ingredientObj : foodObj.getIngredients()) {
+//                        if (ingredientObj.getName().equals(recipeObj.getIngredients()))
+//                    }
+//                }
+            }
+        }
         return null;
     }
 
@@ -29,11 +47,11 @@ public class Restaurant extends Location {
         this.wealth = wealth;
     }
 
-    public List<Menu> getMenuInventory() {
-        return menuInventory;
+    public Menu getRestaurantMenu() {
+        return restaurantMenu;
     }
 
-    public void setMenuInventory(List<Menu> menuInventory) {
-        this.menuInventory = menuInventory;
+    public void setRestaurantMenu(Menu restaurantMenu) {
+        this.restaurantMenu = restaurantMenu;
     }
 }

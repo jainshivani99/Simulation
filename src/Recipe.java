@@ -10,14 +10,60 @@ public class Recipe extends Object {
     private List<Equipment> requiredEquipment;
     private int recipeTime;
 
-    public void printInfo(Recipe thisRecipe) {
-        System.out.println("Base Value: " + thisRecipe.baseValue);
-        System.out.println("Sell Value: " + thisRecipe.sellValue);
-        System.out.println(("Ingredients: " + Arrays.toString((thisRecipe.ingredients).toArray())));
-        System.out.println("Output Food: " + thisRecipe.outputFood);
-        System.out.println("Required Equipment: " + thisRecipe.requiredEquipment);
-        System.out.println("Recipe Time: " + thisRecipe.recipeTime);
+    public void printInfo() {
+        System.out.println("Base Value: " + baseValue);
+        System.out.println("Sell Value: " + sellValue);
+        System.out.println("Ingredients: " + Arrays.toString((ingredients).toArray()));
+        System.out.println("Output Food: " + outputFood);
+        System.out.println("Required Equipment: " + requiredEquipment);
+        System.out.println("Recipe Time: " + recipeTime);
     }
 
+    public double getBaseValue() {
+        return baseValue;
+    }
 
+    public void setBaseValue(double baseValue) {
+        this.baseValue = baseValue;
+    }
+
+    public double getSellValue() {
+        return sellValue;
+    }
+
+    public void setSellValue(double sellValue) {
+        this.sellValue = sellValue;
+    }
+
+    public List<Food> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Food> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Food getOutputFood() {
+        return outputFood;
+    }
+
+    public void setOutputFood(Food outputFood) {
+        this.outputFood = outputFood;
+    }
+
+    public List<Equipment> getRequiredEquipment() {
+        return requiredEquipment;
+    }
+
+    public void setRequiredEquipment(List<Equipment> requiredEquipment) {
+        this.requiredEquipment = requiredEquipment;
+    }
+
+    public int getRecipeTime() {
+        return recipeTime;
+    }
+
+    public void setRecipeTime(int recipeTime) {
+        this.recipeTime = recipeTime;
+    }
 }

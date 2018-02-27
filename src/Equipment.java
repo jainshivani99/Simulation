@@ -7,10 +7,10 @@ public class Equipment extends Object {
     //the cost of owning the equipment per day
     private double upkeepValue;
 
-    public void printInfo(Equipment thisEquipment) {
-        System.out.println("Base Value: " + thisEquipment.baseValue);
-        System.out.println("Sell Value: " + thisEquipment.sellValue);
-        System.out.println("Upkeep Value: " + thisEquipment.upkeepValue);
+    public void printInfo() {
+        System.out.println("Base Value: " + baseValue);
+        System.out.println("Sell Value: " + sellValue);
+        System.out.println("Upkeep Value: " + upkeepValue);
     }
 
 }
