@@ -1,8 +1,8 @@
 public abstract class Object {
 
-    private String name;
-    private double baseValue;
-    private double sellValue;
+    protected String name;
+    protected double baseValue;
+    protected double sellValue;
 
     public String getName() {
         return name;

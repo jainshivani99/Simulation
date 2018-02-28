@@ -28,6 +28,7 @@ public class Simulation {
 
         Scanner myScan = new Scanner(System.in);
         System.out.println("");
+        System.out.println("You are now starting the simulation. Please enter a command.");
 
         while (currentTime <= END_MINUTES) {
             String userInput = myScan.nextLine();
@@ -40,8 +41,8 @@ public class Simulation {
             else {
                 MarketModeCommands(userCommand);
             }
-            printSimulationStatsAndExit();
         }
+        printSimulationStatsAndExit();
     }
 
     /**
@@ -51,14 +52,15 @@ public class Simulation {
     public static void setUpInitialState() {
         //Adding initial food, equipment, recipes, and menu to the restaurant
         //TODO: Add parameters to constructors
-        Food restaurantFood1 = new Food();
-        Food restaurantFood2 = new Food();
-        Food restaurantFood3 = new Food();
-        Food restaurantFood4 = new Food();
-        Food restaurantFood5 = new Food();
-        Food restaurantFood6 = new Food();
-        Food restaurantFood7 = new Food();
-        Food restaurantFood8 = new Food();
+        List<Food> emptyIngredients = new ArrayList<Food>();
+        Food restaurantFood1 = new Food("Cheese", 1.0, 0.8, emptyIngredients);
+        Food restaurantFood2 = new Food("Bread",2.5,2.0,emptyIngredients);
+        Food restaurantFood3 = new Food("Flour", 3.0, 2.4, emptyIngredients);
+        Food restaurantFood4 = new Food("Sauce", 5.6,4.48,emptyIngredients);
+        Food restaurantFood5 = new Food("Milk",2.6,2.08,emptyIngredients);
+        Food restaurantFood6 = new Food("Tomato",1.6,1.28,emptyIngredients);
+        Food restaurantFood7 = new Food("Potato",3.4,2.72,emptyIngredients);
+        Food restaurantFood8 = new Food("Onion",8.9,7.12,emptyIngredients);
         List<Food> initialRestaurantFood = new ArrayList<Food>();
         initialRestaurantFood.add(restaurantFood1);
         initialRestaurantFood.add(restaurantFood2);
@@ -92,8 +94,8 @@ public class Simulation {
         myRestaurant.setRestaurantMenu(restaurantMenu1);
 
         //Adding initial food, equipment, and recipes to the market
-        Food marketFood1 = new Food();
-        Food marketFood2 = new Food();
+        Food marketFood1 = new Food("Olives",0.5,0.4, emptyIngredients);
+        Food marketFood2 = new Food("Peaches",0.8,0.64, emptyIngredients);
         List<Food> initialMarketFood = new ArrayList<>();
         initialMarketFood.add(marketFood1);
         initialMarketFood.add(marketFood2);
@@ -220,7 +222,7 @@ public class Simulation {
             String thisFoodName = userCommand.substring(12);
             myRestaurantMenu.removeFoodItem(thisFoodName);
         } else {
-            System.out.println("This is not a valid command. Please enter something else.");
+            //System.out.println("This is not a valid command. Please enter something else.");
         }
     }
 

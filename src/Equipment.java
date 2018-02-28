@@ -2,10 +2,15 @@ import java.util.Arrays;
 
 public class Equipment extends Object {
 
-    private double baseValue;
-    private double sellValue = 0.5 * baseValue;
     //the cost of owning the equipment per day
     private double upkeepValue;
+
+    public Equipment(String name, double baseValue, double sellValue, double upkeepValue) {
+        this.name = name;
+        this.baseValue = baseValue;
+        this.sellValue = sellValue;
+        this.upkeepValue = upkeepValue;
+    }
 
     public void printInfo() {
         System.out.println("Base Value: " + baseValue);

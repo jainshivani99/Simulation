@@ -3,12 +3,20 @@ import java.util.List;
 
 public class Recipe extends Object {
 
-    private double baseValue;
-    private double sellValue = 0.5 * baseValue;
     private List<Food> ingredients;
     private Food outputFood;
     private List<Equipment> requiredEquipment;
     private int recipeTime;
+
+    public Recipe(String name, double baseValue, double sellValue, List<Food> ingredients, Food outputFood, List<Equipment> requiredEquipment, int recipeTime) {
+        this.name = name;
+        this.baseValue = baseValue;
+        this.sellValue = sellValue;
+        this.ingredients = ingredients;
+        this.outputFood = outputFood;
+        this.requiredEquipment = requiredEquipment;
+        this.recipeTime = recipeTime;
+    }
 
     public void printInfo() {
         System.out.println("Base Value: " + baseValue);

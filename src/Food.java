@@ -3,11 +3,15 @@ import java.util.List;
 
 public class Food extends Object {
 
-    private double baseValue;
-    private double sellValue = 0.8 * baseValue;
-
     //each food has a list of ingredients it is made of, empty if a food is an ingredient
     private List<Food> ingredients;
+
+    public Food(String name, double baseValue, double sellValue, List<Food> ingredients) {
+        this.name = name;
+        this.baseValue = baseValue;
+        this.sellValue = sellValue;
+        this.ingredients = ingredients;
+    }
 
     public void printInfo() {
         System.out.println("Base Value: " + baseValue);

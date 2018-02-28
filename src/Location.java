@@ -5,10 +5,10 @@ import java.util.List;
  */
 public abstract class Location {
 
-    private String name;
-    private List<Food> foodInventory;
-    private List<Equipment> equipmentInventory;
-    private List<Recipe> recipeInventory;
+    protected String name;
+    protected List<Food> foodInventory;
+    protected List<Equipment> equipmentInventory;
+    protected List<Recipe> recipeInventory;
 
     public String getName() {
         return name;
