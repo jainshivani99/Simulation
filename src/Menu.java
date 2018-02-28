@@ -5,6 +5,10 @@ public class Menu {
     private List<Food> foodInventory;
     private final int TIME_TO_ADD_OR_REMOVE_FROM_MENU = 10;
 
+    public Menu(List<Food> foodInventory) {
+        this.foodInventory = foodInventory;
+    }
+
     public List<Food> getFoodInventory() {
         return foodInventory;
     }

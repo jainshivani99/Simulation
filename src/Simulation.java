@@ -72,9 +72,9 @@ public class Simulation {
         initialRestaurantFood.add(restaurantFood8);
         myRestaurant.setFoodInventory(initialRestaurantFood);
 
-        Equipment restaurantEquipment1 = new Equipment();
-        Equipment restaurantEquipment2 = new Equipment();
-        Equipment restaurantEquipment3 = new Equipment();
+        Equipment restaurantEquipment1 = new Equipment("Spoon", 1.2,0.6,2.0);
+        Equipment restaurantEquipment2 = new Equipment("Fork",1.4,0.7,2.0);
+        Equipment restaurantEquipment3 = new Equipment("Straw",1.8,0.9,2.0);
         List<Equipment> initialRestaurantEquipment = new ArrayList<Equipment>();
         initialRestaurantEquipment.add(restaurantEquipment1);
         initialRestaurantEquipment.add(restaurantEquipment2);
@@ -90,7 +90,15 @@ public class Simulation {
         initialRestaurantRecipes.add(restaurantRecipe3);
         myRestaurant.setRecipeInventory(initialRestaurantRecipes);
 
-        Menu restaurantMenu1 = new Menu();
+        List<Food> menuFoodInventory = new ArrayList<Food>();
+        menuFoodInventory.add(restaurantFood1);
+        menuFoodInventory.add(restaurantFood2);
+        menuFoodInventory.add(restaurantFood3);
+        menuFoodInventory.add(restaurantFood4);
+        menuFoodInventory.add(restaurantFood5);
+        menuFoodInventory.add(restaurantFood6);
+        menuFoodInventory.add(restaurantFood7);
+        Menu restaurantMenu1 = new Menu(menuFoodInventory);
         myRestaurant.setRestaurantMenu(restaurantMenu1);
 
         //Adding initial food, equipment, and recipes to the market
@@ -101,8 +109,8 @@ public class Simulation {
         initialMarketFood.add(marketFood2);
         myMarket.setFoodInventory(initialMarketFood);
 
-        Equipment marketEquipment1 = new Equipment();
-        Equipment marketEquipment2  = new Equipment();
+        Equipment marketEquipment1 = new Equipment("Spatula",2.4,1.2,2.0);
+        Equipment marketEquipment2  = new Equipment("Knife",2.6,1.3,2.0);
         List<Equipment> initialMarketEquipment = new ArrayList<Equipment>();
         initialMarketEquipment.add(marketEquipment1);
         initialMarketEquipment.add(marketEquipment2);
