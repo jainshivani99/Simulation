@@ -17,7 +17,6 @@ public class Market extends Location {
      * @return the object the user has bought
      */
     public Object buyObject(List<? extends Object> myObjects, String objectName, Restaurant myRestaurant) {
-        boolean foundObject = false;
         for (Object myObject : myObjects) {
             if (myObject.getName().equals(objectName)) {
                 if (myRestaurant.getWealth() >= myObject.getBaseValue()) {
@@ -47,18 +46,13 @@ public class Market extends Location {
      * @return the sold object
      */
     public Object sellObject(List<? extends Object> myObjects, String objectName, Restaurant myRestaurant) {
-        boolean foundObject = false;
         for (Object myObject : myObjects) {
             if (myObject.getName().equals(objectName)) {
                 double newRestaurantWealth = myRestaurant.getWealth() + myObject.getSellValue();
                 myRestaurant.setWealth(newRestaurantWealth);
 
-                List<Food> newRestaurantFoodInventory = myRestaurant.getFoodInventory();
-                newRestaurantFoodInventory.remove(myObject);
-                myRestaurant.setFoodInventory(newRestaurantFoodInventory);
-
                 List<Food> newMarketFoodInventory = getFoodInventory();
-                newMarketFoodInventory.add(myObject);
+                //newMarketFoodInventory.add(myObject);
                 setFoodInventory(newMarketFoodInventory);
 
                 int newCurrentTime = Simulation.getCurrentTime();
@@ -67,7 +61,6 @@ public class Market extends Location {
                 return myObject;
             }
         }
-        System.out.println("This item does not exist in the market.");
         return null;
     }
 }

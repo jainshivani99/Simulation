@@ -252,7 +252,6 @@ public class Simulation {
                 System.out.println("This is not a valid input.");
             }
         } else if (userCommand.startsWith("buy ")) {
-            //TODO: Finish this functionality with amount
             //buy specified item for specified quantity
             String thisObjectAndAmount = userCommand.substring(4);
             String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
@@ -272,10 +271,10 @@ public class Simulation {
                     newRestaurantEquipmentInventory.add(equipmentObject);
                     myRestaurant.setEquipmentInventory(newRestaurantEquipmentInventory);
                 } else {
-                    Recipe recipeObejct = (Recipe) myMarket.buyObject(myMarketRecipeInventory, objectName, myRestaurant);
-                    if (recipeObejct != null) {
+                    Recipe recipeObject = (Recipe) myMarket.buyObject(myMarketRecipeInventory, objectName, myRestaurant);
+                    if (recipeObject != null) {
                         List<Recipe> newRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
-                        newRestaurantRecipeInventory.add(recipeObejct);
+                        newRestaurantRecipeInventory.add(recipeObject);
                         myRestaurant.setRecipeInventory(newRestaurantRecipeInventory);
                     } else {
                         System.out.println("This item does not exist in the market.");
@@ -284,7 +283,6 @@ public class Simulation {
             }
 
         } else if (userCommand.startsWith("sell ")) {
-            //TODO: Finish this functionality with amount
             //sell specified item for specified quantity
             String thisObjectAndAmount = userCommand.substring(5);
             String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
@@ -292,9 +290,30 @@ public class Simulation {
             String objectAmount = thisObjectNameAndAmountArray[1];
             int objectAmountInt = Integer.parseInt(objectAmount);
 
-            myMarket.sellObject(myMarketFoodInventory, objectName, myRestaurant);
-            myMarket.sellObject(myMarketEquipmentInventory, objectName, myRestaurant);
-            myMarket.sellObject(myMarketRecipeInventory, objectName, myRestaurant);
+            Food foodObject = (Food) myMarket.sellObject(myMarketFoodInventory, objectName, myRestaurant);
+            if (foodObject != null) {
+                List<Food> newRestaurantFoodInventory = myRestaurant.getFoodInventory();
+                newRestaurantFoodInventory.remove(foodObject);
+                myRestaurant.setFoodInventory(newRestaurantFoodInventory);
+            } else {
+                Equipment equipmentObject = (Equipment) myMarket.sellObject(myMarketEquipmentInventory, objectName, myRestaurant);
+                if (equipmentObject != null) {
+                    List<Equipment> newRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
+                    newRestaurantEquipmentInventory.remove(equipmentObject);
+                    myRestaurant.setEquipmentInventory(newRestaurantEquipmentInventory);
+                } else {
+                    Recipe recipeObject = (Recipe) myMarket.sellObject(myMarketRecipeInventory, objectName, myRestaurant);
+                    if (recipeObject != null) {
+                        List<Recipe> newRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
+                        newRestaurantRecipeInventory.remove(recipeObject);
+                        myRestaurant.setRecipeInventory(newRestaurantRecipeInventory);
+                    } else {
+                        System.out.println("This item does not exist in the restaurant.");
+                    }
+                }
+            }
+        } else {
+                System.out.println("This is not a valid command. Please enter something else.");
         }
     }
 
