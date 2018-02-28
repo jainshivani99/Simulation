@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Menu extends Object {
+public class Menu {
 
     private List<Food> foodInventory;
     private final int TIME_TO_ADD_OR_REMOVE_FROM_MENU = 10;

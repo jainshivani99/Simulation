@@ -1,142 +1,70 @@
 import java.util.List;
 
+/**
+ * Holds the features/functions
+ */
 public class Market extends Location {
 
+    //final variables that represent time to buy and sell an object
     private final int TIME_TO_BUY_OBJECT = 20;
     private final int TIME_TO_SELL_OBJECT = 40;
 
-    public Object buyObject(String objectName, int objectAmount, Restaurant myRestaurant) {
-        for (Food foodObj : getFoodInventory()) {
-            if (foodObj.getName().equals(objectName)) {
-                if (myRestaurant.getWealth() >= foodObj.getBaseValue()) {
-                    double newRestaurantWealth = myRestaurant.getWealth() - foodObj.getBaseValue();
+    /**
+     * Buys an object from the market. The user cannot buy an object if they do not have enough money or the object does
+     * not exist.
+     * @param objectName the name of the desired object the user wamts to buy
+     * @param myRestaurant the restaurant that is user is buying it for
+     * @return the object the user has bought
+     */
+    public Object buyObject(List<? extends Object> myObjects, String objectName, Restaurant myRestaurant) {
+        boolean foundObject = false;
+        for (Object myObject : myObjects) {
+            if (myObject.getName().equals(objectName)) {
+                if (myRestaurant.getWealth() >= myObject.getBaseValue()) {
+                    double newRestaurantWealth = myRestaurant.getWealth() - myObject.getBaseValue();
                     myRestaurant.setWealth(newRestaurantWealth);
 
-                    List<Food> newRestaurantFoodInventory = myRestaurant.getFoodInventory();
-                    newRestaurantFoodInventory.add(foodObj);
-                    myRestaurant.setFoodInventory(newRestaurantFoodInventory);
-
                     List<Food> newMarketFoodInventory = getFoodInventory();
-                    newMarketFoodInventory.remove(foodObj);
+                    newMarketFoodInventory.remove(myObject);
                     setFoodInventory(newMarketFoodInventory);
 
                     int newCurrentTime = Simulation.getCurrentTime();
                     newCurrentTime += TIME_TO_BUY_OBJECT;
                     Simulation.setCurrentTime(newCurrentTime);
-                    return foodObj;
+                    return myObject;
                 } else {
                     System.out.println("You don't have enough money to buy this item at this time.");
                 }
             }
         }
-
-        for (Equipment equipmentObj : getEquipmentInventory()) {
-            if (equipmentObj.getName().equals(objectName)) {
-                if (myRestaurant.getWealth() >= equipmentObj.getBaseValue()) {
-                    double newRestaurantWealth = myRestaurant.getWealth() - equipmentObj.getBaseValue();
-                    myRestaurant.setWealth(newRestaurantWealth);
-
-                    List<Equipment> newRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
-                    newRestaurantEquipmentInventory.add(equipmentObj);
-                    myRestaurant.setEquipmentInventory(newRestaurantEquipmentInventory);
-
-                    List<Equipment> newMarketEquipmentInventory = getEquipmentInventory();
-                    newMarketEquipmentInventory.remove(equipmentObj);
-                    setEquipmentInventory(newMarketEquipmentInventory);
-
-                    int newCurrentTime = Simulation.getCurrentTime();
-                    newCurrentTime += TIME_TO_BUY_OBJECT;
-                    Simulation.setCurrentTime(newCurrentTime);
-                    return equipmentObj;
-                } else {
-                    System.out.println("You don't have enough money to buy this item at this time.");
-                }
-            }
-        }
-
-        for (Recipe recipeObj : getRecipeInventory()) {
-            if (recipeObj.getName().equals(objectName)) {
-                if (myRestaurant.getWealth() >= recipeObj.getBaseValue()) {
-                    double newRestaurantWealth = myRestaurant.getWealth() - recipeObj.getBaseValue();
-                    myRestaurant.setWealth(newRestaurantWealth);
-
-                    List<Recipe> newRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
-                    newRestaurantRecipeInventory.add(recipeObj);
-                    myRestaurant.setRecipeInventory(newRestaurantRecipeInventory);
-
-                    List<Recipe> newMarketRecipeInventory = getRecipeInventory();
-                    newMarketRecipeInventory.remove(recipeObj);
-                    setRecipeInventory(newMarketRecipeInventory);
-
-                    int newCurrentTime = Simulation.getCurrentTime();
-                    newCurrentTime += TIME_TO_BUY_OBJECT;
-                    Simulation.setCurrentTime(newCurrentTime);
-                    return recipeObj;
-                } else {
-                    System.out.println("You don't have enough money to buy this item at this time.");
-                }
-            }
-        }
-        System.out.println("This item does not exist in the market.");
         return null;
     }
 
-    public Object sellObject(String objectName, int objectAmount, Restaurant myRestaurant) {
-        for (Food foodObj : myRestaurant.getFoodInventory()) {
-            if (foodObj.getName().equals(objectName)) {
-                double newRestaurantWealth = myRestaurant.getWealth() + foodObj.getSellValue();
+    /**
+     * Sells an object from the restaurant to the market. If the item does not exist in the restaurant, it cannot be sold.
+     * @param objectName the name of the desired object the user wishes to sell
+     * @param myRestaurant the restaurant that will like to sell the object
+     * @return the sold object
+     */
+    public Object sellObject(List<? extends Object> myObjects, String objectName, Restaurant myRestaurant) {
+        boolean foundObject = false;
+        for (Object myObject : myObjects) {
+            if (myObject.getName().equals(objectName)) {
+                double newRestaurantWealth = myRestaurant.getWealth() + myObject.getSellValue();
                 myRestaurant.setWealth(newRestaurantWealth);
 
                 List<Food> newRestaurantFoodInventory = myRestaurant.getFoodInventory();
-                newRestaurantFoodInventory.remove(foodObj);
+                newRestaurantFoodInventory.remove(myObject);
                 myRestaurant.setFoodInventory(newRestaurantFoodInventory);
 
                 List<Food> newMarketFoodInventory = getFoodInventory();
-                newMarketFoodInventory.add(foodObj);
+                newMarketFoodInventory.add(myObject);
                 setFoodInventory(newMarketFoodInventory);
 
                 int newCurrentTime = Simulation.getCurrentTime();
                 newCurrentTime += TIME_TO_SELL_OBJECT;
                 Simulation.setCurrentTime(newCurrentTime);
-                return foodObj;
-            }
-        }
-
-        for (Equipment equipmentObj : myRestaurant.getEquipmentInventory()) {
-            if (equipmentObj.getName().equals(objectName)) {
-                double newRestaurantWealth = myRestaurant.getWealth() + equipmentObj.getSellValue();
-                myRestaurant.setWealth(newRestaurantWealth);
-
-                List<Equipment> newRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
-                newRestaurantEquipmentInventory.remove(equipmentObj);
-                myRestaurant.setEquipmentInventory(newRestaurantEquipmentInventory);
-
-                List<Equipment> newMarketEquipmentInventory = getEquipmentInventory();
-                newMarketEquipmentInventory.add(equipmentObj);
-                setEquipmentInventory(newMarketEquipmentInventory);
-                int newCurrentTime = Simulation.getCurrentTime();
-                newCurrentTime += TIME_TO_SELL_OBJECT;
-                Simulation.setCurrentTime(newCurrentTime);
-                return equipmentObj;
-            }
-        }
-
-        for (Recipe recipeObj : myRestaurant.getRecipeInventory()) {
-            if (recipeObj.getName().equals(objectName)) {
-                double newRestaurantWealth = myRestaurant.getWealth() + recipeObj.getSellValue();
-                myRestaurant.setWealth(newRestaurantWealth);
-
-                List<Recipe> newRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
-                newRestaurantRecipeInventory.remove(recipeObj);
-                myRestaurant.setRecipeInventory(newRestaurantRecipeInventory);
-
-                List<Recipe> newMarketRecipeInventory = getRecipeInventory();
-                newMarketRecipeInventory.add(recipeObj);
-                setRecipeInventory(newMarketRecipeInventory);
-                int newCurrentTime = Simulation.getCurrentTime();
-                newCurrentTime += TIME_TO_SELL_OBJECT;
-                Simulation.setCurrentTime(newCurrentTime);
-                return recipeObj;
+                return myObject;
             }
         }
         System.out.println("This item does not exist in the market.");

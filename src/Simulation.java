@@ -3,26 +3,24 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-//package com.example;
+/**
+ *  A class that includes the main method and its helper functions. It is in charge of running the simulation.
+ */
 
 public class Simulation {
 
-    private static int time;
-
+    //Making class level objects for the simulation
     private static Restaurant myRestaurant = new Restaurant();
     private static Market myMarket = new Market();
-    private static Food myFood = new Food();
-    private static Equipment myEquipment = new Equipment();
-    private static Recipe myRecipe = new Recipe();
-    private static Menu myMenu = new Menu();
 
     //time is stored in minutes
     private static int currentTime;
-    private static int elapsedTime = 0;
     private static int remainingTime;
+    //represents total time in one simulation (24 hours, 1440 minutes)
     private static final int END_MINUTES = 1440;
     private static final int MARKET_TRAVEL_TIME = 60;
 
+    //represents if the player is in the market or not
     private static boolean inMarket = false;
 
     public static void main(String[] args) {
@@ -31,177 +29,28 @@ public class Simulation {
         Scanner myScan = new Scanner(System.in);
         System.out.println("");
 
-        while (true) {
-            List<Food> myRestaurantFoodInventory = myRestaurant.getFoodInventory();
-            List<Equipment> myRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
-            List<Recipe> myRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
-            Menu myRestaurantMenu = myRestaurant.getRestaurantMenu();
-
-            List<Food> myMarketFoodInventory = myMarket.getFoodInventory();
-            List<Equipment> myMarketEquipmentInventory = myMarket.getEquipmentInventory();
-            List<Recipe> myMarketRecipeInventory = myMarket.getRecipeInventory();
-
+        while (currentTime <= END_MINUTES) {
             String userInput = myScan.nextLine();
             String userCommand = userInput.toLowerCase();
 
-            //TODO: Handle extra checking
-            if (inMarket == false) {
-                switch (userCommand) {
-                    case "wealth":
-                        //display current wealth of restaurant
-                        System.out.println("Current Restaurant wealth: " + myRestaurant.getWealth());
-                        break;
-                    case "time":
-                        //display current time
-                        printCurrentTime();
-                        break;
-                    case "time left":
-                        //display time left in the simulation
-                        printTimeLeft();
-                        break;
-                    case "popularity rating":
-                        //TODO: Finish this implementation
-                        myRestaurant.getPopularityRating();
-                        break;
-                    case "menu list":
-                        //display current menu list with sales values
-                        System.out.println("Restaurant Menu: ");
-                        for (Food foodObj : myRestaurantMenu.getFoodInventory()) {
-                            System.out.println(foodObj + " ");
-                            System.out.print(foodObj.getSellValue());
-                        }
-                        break;
-                    case "market":
-                        inMarket = true;
-                        break;
-                }
-                if (userCommand.startsWith("pass time ")) {
-                    String thisTime = userInput.substring(10);
-                    int thisTimeInt = Integer.parseInt(thisTime);
-
-                    //pass a certain number of minutes
-                    currentTime += thisTimeInt;
-                    if (currentTime >= END_MINUTES) {
-                        printSimulationStatsAndExit();
-                    }
-                } else if (userCommand.startsWith("inventory ")) {
-                    //list all the items of the specified type
-                    String thisType = userInput.substring(10);
-                    if (thisType.equalsIgnoreCase("food")) {
-                        System.out.println(Arrays.toString(myRestaurantFoodInventory.toArray()));
-                    } else if (thisType.equalsIgnoreCase("equipment")) {
-                        System.out.println(Arrays.toString(myRestaurantEquipmentInventory.toArray()));
-                    } else if (thisType.equalsIgnoreCase("recipe")) {
-                        System.out.println(Arrays.toString(myRestaurantRecipeInventory.toArray()));
-                    } else if (thisType.equalsIgnoreCase("menu")) {
-                        System.out.println(myRestaurantMenu.getName());
-                    } else {
-                        System.out.println("This is not a valid input.");
-                    }
-                } else if (userCommand.startsWith("info ")) {
-                    //TODO: Handle extra checking, boolean foundObject
-                    //list all the properties of the item specified
-                    String thisObject = userInput.substring(5);
-
-                    //if thisObject is in your food, equipment, or recipe inventory
-                    for (Food foodObj : myRestaurantFoodInventory) {
-                        if (foodObj.getName().equals(thisObject)) {
-                            foodObj.printInfo();
-                            break;
-                        }
-                    }
-
-                    for (Equipment equipmentObj : myRestaurantEquipmentInventory) {
-                        if (equipmentObj.getName().equals(thisObject)) {
-                            equipmentObj.printInfo();
-                            break;
-                        }
-                    }
-
-                    for (Recipe recipeObj : myRestaurantRecipeInventory) {
-                        if (recipeObj.getName().equals(thisObject)) {
-                            recipeObj.printInfo();
-                            break;
-                        }
-                    }
-                } else if (userCommand.startsWith("cook ")) {
-                    //TODO: Finish this functionality with amount
-                    //cook the specified food for the specified amount
-                    String thisFoodNameAndAmount = userInput.substring(5);
-                    String[] thisFoodNameAndAmountArray = thisFoodNameAndAmount.split(" ");
-                    String foodName = thisFoodNameAndAmountArray[0];
-                    String foodAmount = thisFoodNameAndAmountArray[1];
-                    int foodAmountInt = Integer.parseInt(foodAmount);
-                    myRestaurant.cookFood(foodName, foodAmountInt);
-                } else if (userCommand.startsWith("menu add ")) {
-                    //add the specified food item to the menu
-                    String thisFoodName = userInput.substring(9);
-                    myMenu.addFoodItem(thisFoodName, myRestaurant);
-                } else if (userCommand.startsWith("menu remove ")) {
-                    //remove the specified food item from the menu
-                    String thisFoodName = userInput.substring(12);
-                    myMenu.removeFoodItem(thisFoodName);
-                } else {
-                    System.out.println("This is not a valid command. Please enter something else.");
-                }
+            if (!inMarket) {
+                RestaurantModeCommands(userCommand);
             }
             //if the user is in the market, they have a separate list of commands
             else {
-                if (userCommand.equals("exit")) {
-                    System.out.println("You are now exiting the market.");
-                    //pass one hour
-                    currentTime += MARKET_TRAVEL_TIME;
-                    inMarket = false;
-                } else if (userCommand.startsWith("list ")) {
-                    //list all the items of the specified type for sale
-                    String thisObject = userInput.substring(5);
-
-                    for (Food foodObj : myMarketFoodInventory) {
-                        if (foodObj.getName().equals(thisObject)) {
-                            System.out.println(foodObj.getName());
-                            break;
-                        }
-                    }
-
-                    for (Equipment equipmentObj : myMarketEquipmentInventory) {
-                        if (equipmentObj.getName().equals(thisObject)) {
-                            System.out.println(equipmentObj.getName());
-                            break;
-                        }
-                    }
-
-                    for (Recipe recipeObj : myMarketRecipeInventory) {
-                        if (recipeObj.getName().equals(thisObject)) {
-                            System.out.println(recipeObj.getName());
-                            break;
-                        }
-                    }
-                } else if (userCommand.startsWith("buy ")) {
-                    //TODO: Finish this functionality with amount
-                    //buy specified item for specified quantity
-                    String thisObjectAndAmount = userInput.substring(4);
-                    String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
-                    String objectName = thisObjectNameAndAmountArray[0];
-                    String objectAmount = thisObjectNameAndAmountArray[1];
-                    int objectAmountInt = Integer.parseInt(objectAmount);
-                    myMarket.buyObject(objectName, objectAmountInt, myRestaurant);
-                } else if (userCommand.startsWith("sell ")) {
-                    //TODO: Finish this functionality with amount
-                    //sell specified item for specified quantity
-                    String thisObjectAndAmount = userInput.substring(5);
-                    String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
-                    String objectName = thisObjectNameAndAmountArray[0];
-                    String objectAmount = thisObjectNameAndAmountArray[1];
-                    int objectAmountInt = Integer.parseInt(objectAmount);
-                    myMarket.sellObject(objectName, objectAmountInt, myRestaurant);
-                }
+                MarketModeCommands(userCommand);
             }
-
+            printSimulationStatsAndExit();
         }
     }
 
+    /**
+     * Sets up initial data into the simulation, such as initial food, equipment, recipes, and menus.
+     * This is the first method that is called from the main method.
+     */
     public static void setUpInitialState() {
         //Adding initial food, equipment, recipes, and menu to the restaurant
+        //TODO: Add parameters to constructors
         Food restaurantFood1 = new Food();
         Food restaurantFood2 = new Food();
         Food restaurantFood3 = new Food();
@@ -272,6 +121,186 @@ public class Simulation {
         currentTime = 0;
     }
 
+    /**
+     * Handles user input according to when the user is in the restaurant.
+     * @param userCommand the command that the user has specified
+     */
+    public static void RestaurantModeCommands(String userCommand) {
+        List<Food> myRestaurantFoodInventory = myRestaurant.getFoodInventory();
+        List<Equipment> myRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
+        List<Recipe> myRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
+        Menu myRestaurantMenu = myRestaurant.getRestaurantMenu();
+
+        switch (userCommand) {
+            case "wealth":
+                //display current wealth of restaurant
+                System.out.println("Current Restaurant wealth: " + myRestaurant.getWealth());
+                break;
+            case "time":
+                //display current time
+                printCurrentTime();
+                break;
+            case "time left":
+                //display time left in the simulation
+                printTimeLeft();
+                break;
+            case "popularity rating":
+                //TODO: Finish this implementation
+                myRestaurant.getPopularityRating();
+                break;
+            case "menu list":
+                //display current menu list with sales values
+                System.out.println("Restaurant Menu: ");
+                for (Food foodObj : myRestaurantMenu.getFoodInventory()) {
+                    System.out.println(foodObj + " ");
+                    System.out.print(foodObj.getBaseValue());
+                }
+                break;
+            case "market":
+                currentTime += MARKET_TRAVEL_TIME;
+                inMarket = true;
+                break;
+        }
+        if (userCommand.startsWith("pass time ")) {
+            String thisTime = userCommand.substring(10);
+            int thisTimeInt = Integer.parseInt(thisTime);
+
+            //pass a certain number of minutes
+            currentTime += thisTimeInt;
+            if (currentTime >= END_MINUTES) {
+                printSimulationStatsAndExit();
+            }
+        } else if (userCommand.startsWith("inventory ")) {
+            //list all the items of the specified type
+            String thisType = userCommand.substring(10);
+            if (thisType.equals("food")) {
+                System.out.println(Arrays.toString(myRestaurantFoodInventory.toArray()));
+            } else if (thisType.equals("equipment")) {
+                System.out.println(Arrays.toString(myRestaurantEquipmentInventory.toArray()));
+            } else if (thisType.equals("recipe")) {
+                System.out.println(Arrays.toString(myRestaurantRecipeInventory.toArray()));
+            } else if (thisType.equals("menu")) {
+                for (Food foodObj : myRestaurantMenu.getFoodInventory()) {
+                    System.out.println(foodObj + " ");
+                    System.out.print(foodObj.getBaseValue());
+                }
+            } else {
+                System.out.println("This is not a valid input.");
+            }
+        } else if (userCommand.startsWith("info ")) {
+            //list all the properties of the item specified
+            String thisObject = userCommand.substring(5);
+
+            //if thisObject is in your food, equipment, or recipe inventory
+            //used short-circuiting to avoid extra checking
+            if (!printObjectInfoIfNameIs(myRestaurantFoodInventory, thisObject)
+                && !printObjectInfoIfNameIs(myRestaurantEquipmentInventory, thisObject)
+                && !printObjectInfoIfNameIs(myRestaurantRecipeInventory, thisObject)) {
+                        System.out.println("This item does not exist.");
+            }
+
+        } else if (userCommand.startsWith("cook ")) {
+            //cook the specified food for the specified amount
+            String thisFoodNameAndAmount = userCommand.substring(5);
+            String[] thisFoodNameAndAmountArray = thisFoodNameAndAmount.split(" ");
+            String foodName = thisFoodNameAndAmountArray[0];
+            String foodAmount = thisFoodNameAndAmountArray[1];
+            int foodAmountInt = Integer.parseInt(foodAmount);
+            if (foodAmountInt == 1) {
+                myRestaurant.cookFoodOnce(foodName);
+            } else {
+                myRestaurant.cookFoodMultiple(foodName, foodAmountInt);
+            }
+        } else if (userCommand.startsWith("menu add ")) {
+            //add the specified food item to the menu
+            String thisFoodName = userCommand.substring(9);
+            myRestaurantMenu.addFoodItem(thisFoodName, myRestaurant);
+        } else if (userCommand.startsWith("menu remove ")) {
+            //remove the specified food item from the menu
+            String thisFoodName = userCommand.substring(12);
+            myRestaurantMenu.removeFoodItem(thisFoodName);
+        } else {
+            System.out.println("This is not a valid command. Please enter something else.");
+        }
+    }
+
+    /**
+     * Handles user input according to when the user is in the market.
+     * @param userCommand the command that the user has specified
+     */
+    public static void MarketModeCommands(String userCommand){
+        List<Food> myMarketFoodInventory = myMarket.getFoodInventory();
+        List<Equipment> myMarketEquipmentInventory = myMarket.getEquipmentInventory();
+        List<Recipe> myMarketRecipeInventory = myMarket.getRecipeInventory();
+
+        if (userCommand.equals("exit")) {
+            System.out.println("You are now exiting the market.");
+            //pass one hour
+            currentTime += MARKET_TRAVEL_TIME;
+            inMarket = false;
+        } else if (userCommand.startsWith("list ")) {
+            //list all the items of the specified type for sale
+            String thisObject = userCommand.substring(5);
+
+            if(thisObject.equals("food")) {
+                System.out.println(Arrays.toString(myMarketFoodInventory.toArray()));
+            } else if (thisObject.equals("equipment")) {
+                System.out.println(Arrays.toString(myMarketEquipmentInventory.toArray()));
+            } else if (thisObject.equals("recipe")) {
+                System.out.println(Arrays.toString(myMarketRecipeInventory.toArray()));
+            } else {
+                System.out.println("This is not a valid input.");
+            }
+        } else if (userCommand.startsWith("buy ")) {
+            //TODO: Finish this functionality with amount
+            //buy specified item for specified quantity
+            String thisObjectAndAmount = userCommand.substring(4);
+            String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
+            String objectName = thisObjectNameAndAmountArray[0];
+            String objectAmount = thisObjectNameAndAmountArray[1];
+            int objectAmountInt = Integer.parseInt(objectAmount);
+
+            Food foodObject = (Food) myMarket.buyObject(myMarketFoodInventory, objectName, myRestaurant);
+            if (foodObject != null) {
+                List<Food> newRestaurantFoodInventory = myRestaurant.getFoodInventory();
+                newRestaurantFoodInventory.add(foodObject);
+                myRestaurant.setFoodInventory(newRestaurantFoodInventory);
+            } else {
+                Equipment equipmentObject = (Equipment) myMarket.buyObject(myMarketEquipmentInventory, objectName, myRestaurant);
+                if (equipmentObject != null) {
+                    List<Equipment> newRestaurantEquipmentInventory = myRestaurant.getEquipmentInventory();
+                    newRestaurantEquipmentInventory.add(equipmentObject);
+                    myRestaurant.setEquipmentInventory(newRestaurantEquipmentInventory);
+                } else {
+                    Recipe recipeObejct = (Recipe) myMarket.buyObject(myMarketRecipeInventory, objectName, myRestaurant);
+                    if (recipeObejct != null) {
+                        List<Recipe> newRestaurantRecipeInventory = myRestaurant.getRecipeInventory();
+                        newRestaurantRecipeInventory.add(recipeObejct);
+                        myRestaurant.setRecipeInventory(newRestaurantRecipeInventory);
+                    } else {
+                        System.out.println("This item does not exist in the market.");
+                    }
+                }
+            }
+
+        } else if (userCommand.startsWith("sell ")) {
+            //TODO: Finish this functionality with amount
+            //sell specified item for specified quantity
+            String thisObjectAndAmount = userCommand.substring(5);
+            String[] thisObjectNameAndAmountArray = thisObjectAndAmount.split(" ");
+            String objectName = thisObjectNameAndAmountArray[0];
+            String objectAmount = thisObjectNameAndAmountArray[1];
+            int objectAmountInt = Integer.parseInt(objectAmount);
+
+            myMarket.sellObject(myMarketFoodInventory, objectName, myRestaurant);
+            myMarket.sellObject(myMarketEquipmentInventory, objectName, myRestaurant);
+            myMarket.sellObject(myMarketRecipeInventory, objectName, myRestaurant);
+        }
+    }
+
+    /**
+     * Prints the ending stats of the simulation and exits the program.
+     */
     public static void printSimulationStatsAndExit() {
         System.out.println("Current Time: " + currentTime);
         System.out.println("Amount of Food in Restaurant: " + myRestaurant.getFoodInventory().size());
@@ -281,12 +310,16 @@ public class Simulation {
         System.exit(0);
     }
 
-    //Time will use military time
+    /**
+     * Prints the current time in the simulation. It will be represented as hours and minutes in military time.
+     */
     public static void printCurrentTime() {
         System.out.println((currentTime / 60) + ":" + (currentTime % 60));
     }
 
-    //Time will use military time
+    /**
+     * Prints the time left in the simulation. It will be represented as hours and minutes in military time.
+     */
     public static void printTimeLeft() {
         remainingTime = END_MINUTES - currentTime;
         if (remainingTime >= 60) {
@@ -296,11 +329,30 @@ public class Simulation {
         }
     }
 
+    /**
+     * Gets the current time of the simulation.
+     * @return the current time in minutes
+     */
     public static int getCurrentTime() {
         return currentTime;
     }
 
+    /**
+     * Sets the current time of the simulation.
+     * @param currentTime the current time in minutes
+     */
     public static void setCurrentTime(int currentTime) {
         Simulation.currentTime = currentTime;
     }
+
+    public static boolean printObjectInfoIfNameIs(List<? extends Object> myObjects, String thisObject) {
+        for (Object myObj : myObjects) {
+            if (myObj.getName().equals(thisObject)) {
+                myObj.printInfo();
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

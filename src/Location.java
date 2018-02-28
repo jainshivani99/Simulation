@@ -1,5 +1,8 @@
 import java.util.List;
 
+/**
+ * Represents an abstract Location class that has certain properties/functions both a restaurant and market share.
+ */
 public abstract class Location {
 
     private String name;
